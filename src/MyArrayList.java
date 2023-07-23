@@ -19,6 +19,31 @@ public class MyArrayList<T> implements MyList<T> {
         array[this.size] = item;
         this.size++;
     }
+    @Override
+    public T get(int index){
+        checkIndex(index);
+        //Return index of an array
+        return (T) array[index];
+    }
+    @Override
+    public T remove(int index){
+        checkIndex(index);
+        T removedItem = (T) array[index];
+        System.arraycopy(array, index + 1, array, index, this.size - index - 1);
+        this.size--;
+        array[size] = null;
+        return removedItem;
 
-
+    }
+    public void checkIndex(int index){
+        //If index is not in boundaries -> throw exception
+        if (index < 0 || index >= this.size){
+            throw new IndexOutOfBoundsException();
+        }
+    }
+    @Override
+    public int size(){
+        //returning the size variable
+        return this.size;
+    }
 }
