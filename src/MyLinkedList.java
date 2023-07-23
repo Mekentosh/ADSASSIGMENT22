@@ -83,4 +83,147 @@ public class MyLinkedList<E> implements MyList<E> {
         }
         return false;
     }
+    public void add(E item, int index) {
+        checkIndex(index);
+
+        Node newNode = new Node(item, null, null);
+
+        if (size == 0) {
+            head = tail = newNode;
+        }
+        else if (index == 0) {
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        }
+        else if (index == size) {
+            newNode.prev = tail;
+            tail.next = newNode;
+            tail = newNode;
+        }
+        else {
+            Node current = head;
+            for (int i = 0; i < index; i++) {
+                current = current.next;
+            }
+            Node prevNode = current.prev;
+            newNode.prev = prevNode;
+            newNode.next = current;
+            prevNode.next = newNode;
+            current.prev = newNode;
+        }
+
+        size++;
+    }
+    @Override
+    public boolean remove(E item) {
+        Node current = head;
+        while (current != null) {
+            if (current.element.equals(item)) {
+                if (current == head) {
+                    head = current.next;
+                    if (head != null) {
+                        head.prev = null;
+                    } else {
+                        tail = null;
+                    }
+                }
+                else if (current == tail) {
+                    tail = current.prev;
+                    if (tail != null) {
+                        tail.next = null;
+                    } else {
+                        head = null;
+                    }
+                }
+                else {
+                    current.prev.next = current.next;
+                    current.next.prev = current.prev;
+                }
+                size--;
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+    @Override
+    public void clear() {
+        Node current = head;
+        while (current != null) {
+            Node next = current.next;
+            current.element = null;
+            current.next = null;
+            current.prev = null;
+            current = next;
+        }
+        head = null;
+        tail = null;
+        size = 0;
+    }
+    @Override
+    public void sort() {
+        if (head != null) {
+            Node current = null,
+                    new_head = null,
+                    move_node = null,
+                    prev = null;
+            while (head != null) {
+                prev = null;
+                current = head;
+                move_node = head;
+                while (current != null) {
+                    if (current.next != null && ((Comparable<E>) current.next.element).compareTo(move_node.element) > 0) {
+                        move_node = current.next;
+                        prev = current;
+                    }
+                    current = current.next;
+                }
+                if (move_node == head) {
+                    head = (head).next;
+                }
+                if (prev != null) {
+                    prev.next = move_node.next;
+                }
+                move_node.next = new_head;
+                new_head = move_node;
+            }
+            head = new_head;
+        } else {
+            System.out.println("Empty Linked list");
+        }
+    }
+    @Override
+    public int indexOf(Object o) {
+        int index = 0;
+        Node current = head;
+        while (current != null) {
+            if (current.element.equals(o)) {
+                return index;
+            }
+            current = current.next;
+            index++;
+        }
+        return -1;
+    }
+    @Override
+    public int lastIndexOf(Object o) {
+        int index = size - 1;
+        Node current = tail;
+        while (current != null) {
+            if (current.element.equals(o)) {
+                return index;
+            }
+            current = current.prev;
+            index--;
+        }
+        return -1;
+    }
+
+    @Override
+    public void deleteDuplicates(){
+        System.out.println("No method was implemented yet");
+    }
+
+
 }
